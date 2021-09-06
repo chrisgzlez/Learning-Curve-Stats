@@ -1,43 +1,22 @@
 #Create the Classes Programs and Data
-import re
-from dataclasses import dataclass
-import datetime as dt
-import sqlite3
-from .Modules import databaseManagement as dm
+from secrets import token_hex
 
-
-
-@dataclass
-class _ProgramBase:
-    name: str
-
-
-@dataclass
-#frozen means read-only, so no modifying the data
-class Program(_ProgramBase):
-
-    #sort_index: int = field(init=False, repr = False)
-
-    def time_monitoring(self):
-        timestamp = str(dt.datetime.now())
-        timestamp_pattern = r"(?P<Date>((-)*([0-9]{2,4})){3}) (?P<Time>((:)*([0-9]{2})){3})"
-        match = re.match(timestamp_pattern, timestamp)
-        #in case of an update changing the format of the dates
-        if not match:
-            print("""ERROR
-                    It has not been matched
-                    CHECK main.py, timestamp_pattern""")
-        date = match.group("Date")
-        time = match.group("Time")
-        print(f"Program: {self.name} Initialized at {time} on {date}")
-
-
+from Modules import databaseManagement as dM
+from time import sleep
+from random import randint
+# cannot use relative imports in the root folder, then you must use absolute
 
 if __name__ == '__main__':
-    VSCode = dm.DataBase("VSCode", "Age", "Place_of_Birth")
-    print(VSCode)
-    VSCode.time_monitoring()
-    
+    VSCode = dM.DataBase("VSCode")
+    Chrome = dM.DataBase("Chrome")
     VSCode.create_table()
-    VSCode.get_data()
-    VSCode.get_all()
+    Chrome.create_table()
+
+    def monitor(*programs: dM.DataBase):
+        for program in programs:
+            program.start_monitoring()
+            sleep(5)
+            program.add_data(program.stop_monitoring())
+            program.show_table()
+
+    monitor(VSCode, Chrome)
