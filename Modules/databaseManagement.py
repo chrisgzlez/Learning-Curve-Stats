@@ -62,7 +62,7 @@ class Program(_ProgramBase):
         self.time_array[date] = time
         print(f"Program: {self.name} Initialized at {time} on {date}")
 
-    def stop_monitoring(self) -> tuple:
+    def stop_monitoring(self) -> tuple[str, str, str]:
         for date, time in self.time_array.items():
             print(f"""Program: {self.name}
             Program Was Initialized at {time} on {date}
