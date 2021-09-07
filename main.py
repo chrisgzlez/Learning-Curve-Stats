@@ -37,7 +37,9 @@ def switch(value: bool) -> bool:
         return True
 
 
-def get_app(action: str) -> (dM.DataBase, str):
+# the following type annotation error just depends on your editor
+# it doesn't affect the code despite being in red
+def get_app(action: str) -> tuple[dM.DataBase, tuple]:
     while True:
         app = input(f"What program would you like to {action}? ")
         if app in vs_names:
